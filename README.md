@@ -21,9 +21,11 @@ The model is still overfitting; incorporating different types of features from a
 | [Kaggle IMDB movies dataset](https://www.kaggle.com/datasets/ashpalsingh1525/imdb-movies-dataset) | Genre, Overview, Crew|
 
 ## Features Created
+| Features | Description |
+|-------------|----------|
 |genre_code| Given each Genre cunstruct a Code|
 |overview_word_count| Counted How Long the overview is|
-|'crew_code_sum'|Cunted how many cast members there are|
+|crew_code_sum|split up the crewmembers then gave each crew member a unique me code and then added tose codes together|
 |release_date_int| turned the date in to a number|
 |budget_crew| budget / crew_count|
 |budget_per_minute| budget/duration|
