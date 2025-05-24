@@ -70,6 +70,9 @@ def predict_movie(budget, genre_search_string, overview_string, crew_string, rel
 
     # Get Crew Budget
     budget_crew = budget / crew_code_sum if crew_code_sum > 0 else 0
+
+    # Calculate the budget per minute
+    budget_per_minute = budget / duration if duration > 0 else 0
     
     # Create a DataFrame with the input features
     input_data = pd.DataFrame([{
@@ -80,6 +83,7 @@ def predict_movie(budget, genre_search_string, overview_string, crew_string, rel
         'release_date_int': release_date_int,
         'budget_crew': budget_crew,
         'duration': duration,
+        'budget_per_minute': budget_per_minute
     }])
     
     # Make the prediction using the random forest model
