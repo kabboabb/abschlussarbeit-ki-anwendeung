@@ -9,28 +9,22 @@ The model is still underfitting, incorporating different types of features from 
 ### Name & URL
 | Name          | URL |
 |--------------|----|
-| Huggingface  | [Huggingface Space](https://huggingface.co/spaces/kuhs/apartment) |
-| Code         | [GitHub Repository](https://github.com/bkuehnis/ai-application-apartment-prediction/tree/main) |
+| Huggingface  | [Huggingface Space](https://huggingface.co/spaces/kabboabb/movie-revenue-hit-or-flop-prediction) |
+| Code         | [GitHub Repository](https://github.com/kabboabb/abschlussarbeit-ki-anwendeung) |
 
 ## Data Sources and Features Used Per Source
 | Data Source | Features |
 |-------------|----------|
-| [Immoscout24](https://www.immoscout24.ch/) | bfs_number, rooms, area, price, postalcode, address, town, description_raw |
-| [Wikipedia - Zurich Districts](https://de.wikipedia.org/wiki/Stadtteile_der_Stadt_Z%C3%BCrich) | residents per district |
-| [Zurich District Borders](https://www.stadt-zuerich.ch/geodaten/download/Statistische_Quartiere) | district borders |
-| [Swiss Atlas](https://www.atlas.bfs.admin.ch/maps/13/de/18055_75_3501_70/27876.html) | bfs_name, pop, pop_dens, frg_pct, emp, tax_income |
-| [Swiss Geo API](https://api3.geo.admin.ch/services/sdiservices.html) | Latitude, longitude |
+| [Kaggle IMDb Movies dataset from 2000 - 2020](https://www.kaggle.com/datasets/chenyanglim/imdb-v2) | duration |
+| [Kaggle Movie Budgets And Revenues](https://www.stadt-zuerich.ch/geodaten/download/Statistische_Quartiere) | Relese Date, Movie Name, Budget, Domestic Gross, World Wide Gross |
+| [Kaggle IMDB movies dataset](https://www.kaggle.com/datasets/ashpalsingh1525/imdb-movies-dataset) | Genre, Overview, Crew|
 
 ## Features Created
-| Feature | Description |
-|---------|-------------|
-| room_per_m2 | Room / area |
-| price_per_m2 | Price / area (not used!) |
-| Luxurious, temporary, furnished | Extracted binary feature from description_raw if luxurious, temporary, furnished |
-| area_cat, area_cat_encoded | Encoded area into three groups:<br>0: 0 – 49 m²<br>1: 50 – 99 m²<br>2: 100 – 500 m² |
-| (LOFT), (POOL), (ATTIKA), (EXKLUSIV), (SEESICHT), (LUXURIÖS) | One hot encoding of feature Luxurious depending on type of luxurious |
-| Kreis 1-12 | One hot encoding of apartments in the city Zurich |
-| zurich_city | Binary feature if apartment is in the city Zurich |
+|genre_code| Given each Genre cunstruct a Code|
+|overview_word_count| Counted How Long the overview is|
+|'crew_code_sum'|Cunted how many cast members there are|
+|release_date_int| turned the date in to a number|
+|budget_crew| budget / crew_count|
 
 ## Model Training
 ### Amount of Data

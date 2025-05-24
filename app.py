@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pickle
 # TODO change the file to your own model.
-model_filename = "random_forest_regression.pkl"
+model_filename = "random_forest_regression_updated.pkl"
 
 random_forest_model = RandomForestRegressor()
 with open(model_filename, 'rb') as f:
@@ -20,7 +20,7 @@ def search_genre_exact_match(search_string):
     return result
 
 # Example usage
-search_string = "Action, Adventure, Comedy, Science Fiction"
+search_string = "Action, Adventure"
 exact_match = search_genre_exact_match(search_string)
 print(exact_match)
 def count_crew_members(crew_string):
@@ -52,7 +52,7 @@ date_string = "01.01.2023"
 converted_date = convert_date_format(date_string)
 print("Converted date:", converted_date)
 # Define the core prediction function
-def predict_movie(budget, genre_search_string, overview_string, crew_string, release_date_string):
+def predict_movie(budget, genre_search_string, overview_string, crew_string, release_date_string, duration):
     # Get the genre_code using the search_genre_exact_match function
     genre_match = search_genre_exact_match(genre_search_string)
     if genre_match.empty:
@@ -78,17 +78,18 @@ def predict_movie(budget, genre_search_string, overview_string, crew_string, rel
         'overview_word_count': overview_word_count,
         'crew_code_sum': crew_code_sum,
         'release_date_int': release_date_int,
-        'budget_crew': budget_crew
+        'budget_crew': budget_crew,
+        'duration': duration,
     }])
     
     # Make the prediction using the random forest model
     prediction = random_forest_model.predict(input_data)
     return np.round(prediction[0], 0)
-predict_movie(30000000000, 'Action', 'A very Action packed movie', 'Director, Producer, Writer, Cinematographer', '01.01.2023')
+predict_movie(30000000000, 'Action', 'A very Action packed movie', 'Director, Producer, Writer, Cinematographer', '01.01.2023', 120)
 # Define a function to determine if the movie is a flop or hit
-def determine_flop_or_hit(budget, genre_search_string, overview_string, crew_string, release_date_string):
+def determine_flop_or_hit(budget, genre_search_string, overview_string, crew_string, release_date_string, duration):
     # Predict the revenue using the predict_movie function
-    predicted_revenue = predict_movie(budget, genre_search_string, overview_string, crew_string, release_date_string)
+    predicted_revenue = predict_movie(budget, genre_search_string, overview_string, crew_string, release_date_string, duration)
     
     # Determine if the movie is a flop or hit
     if predicted_revenue - budget > 0:
@@ -98,24 +99,25 @@ def determine_flop_or_hit(budget, genre_search_string, overview_string, crew_str
 
 # Create the Gradio interface
 iface = gr.Interface(
-    fn=lambda budget, genre_search_string, overview_string, crew_string, release_date_string: (
-        predict_movie(budget, genre_search_string, overview_string, crew_string, release_date_string),
-        determine_flop_or_hit(budget, genre_search_string, overview_string, crew_string, release_date_string)
+    fn=lambda budget, genre_search_string, overview_string, crew_string, release_date_string, duration: (
+        predict_movie(budget, genre_search_string, overview_string, crew_string, release_date_string, duration),
+        determine_flop_or_hit(budget, genre_search_string, overview_string, crew_string, release_date_string, duration)
     ),
     inputs=[
         gr.Number(label="Budget"),
         gr.Textbox(label="Genre Search String"),
         gr.Textbox(label="Overview String"),
         gr.Textbox(label="Crew String"),
-        gr.Textbox(label="Release Date String (DD.MM.YYYY)")
+        gr.Textbox(label="Release Date String (DD.MM.YYYY)"),
+        gr.Number(label="Duration (in minutes)")
     ],
     outputs=[
         gr.Number(label="Predicted Revenue"),
         gr.Textbox(label="Flop or Hit")
     ],
     examples=[
-        [30000000000, "Action", "A very Action packed movie", "Director, Producer, Writer, Cinematographer", "01.01.2023"],
-        [50000000, "Comedy", "A hilarious comedy movie", "Director, Writer", "15.06.2022"]
+        [30000000, "Action, Adventure", "A very Action packed movie", "Jason Stattham, Chris Pratt, Scarlett Johansson", "01.01.2023", 120],
+        [50000000, "Comedy", "A hilarious comedy movie", "Tom Holland, Chris Evans", "15.06.2022", 90],
     ]
 )
 
